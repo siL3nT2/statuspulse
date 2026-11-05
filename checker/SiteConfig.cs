@@ -25,15 +25,17 @@ public static class SiteConfig
 
         foreach (var site in sites)
         {
-            if (!Regex.IsMatch(site.Id ?? "", "^[a-z0-9-]{1,40}$"))
+            string id = site.Id ?? "";
+
+            if (!Regex.IsMatch(id, "^[a-z0-9-]{1,40}$"))
             {
                 throw new InvalidOperationException(
-                    $"Invalid site id '{site.Id}'. Use 1-40 lowercase letters, digits or hyphens.");
+                    $"Invalid site id '{id}'. Use 1-40 lowercase letters, digits or hyphens.");
             }
 
-            if (!seen.Add(site.Id))
+            if (!seen.Add(id))
             {
-                throw new InvalidOperationException($"Duplicate site id '{site.Id}'.");
+                throw new InvalidOperationException($"Duplicate site id '{id}'.");
             }
 
             bool validUrl =
@@ -43,7 +45,7 @@ public static class SiteConfig
             if (!validUrl)
             {
                 throw new InvalidOperationException(
-                    $"Invalid URL for site '{site.Id}'. Only http and https addresses are allowed.");
+                    $"Invalid URL for site '{id}'. Only http and https addresses are allowed.");
             }
         }
     }
