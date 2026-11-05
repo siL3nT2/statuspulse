@@ -1,0 +1,1 @@
+public record Site(string Id, string Name, string Url);
