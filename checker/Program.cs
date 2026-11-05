@@ -14,8 +14,12 @@ foreach (var site in sites)
         () => SiteChecker.CheckAsync(client, site.Url),
         TimeSpan.FromSeconds(5));
 
+    var history = await HistoryStore.LoadAsync(outputFolder, site.Id);
+    history = History.AppendAndTrim(history, result, DateTime.UtcNow);
+    await HistoryStore.SaveAsync(outputFolder, site.Id, history);
+
     checks.Add(new SiteCheck(site, result));
-    Console.WriteLine($"{site.Name} -> {StatusRules.GetStatus(result)}");
+    Console.WriteLine($"{site.Name} -> {StatusRules.GetStatus(result)} ({history.Count} checks in history)");
 }
 
 var report = ReportBuilder.Build(DateTime.UtcNow, checks);
