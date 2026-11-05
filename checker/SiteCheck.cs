@@ -1,0 +1,1 @@
+public record SiteCheck(Site Site, CheckResult Result);
