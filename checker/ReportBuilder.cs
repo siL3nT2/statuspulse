@@ -11,7 +11,8 @@ public static class ReportBuilder
                 item.Site.Name,
                 item.Site.Url,
                 StatusRules.GetStatus(item.Result),
-                item.Result));
+                item.Result,
+                Uptime.Summarize(item.History, generatedAt)));
         }
 
         return new LatestReport(generatedAt, sites);

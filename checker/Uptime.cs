@@ -11,9 +11,14 @@ public static class Uptime
         }
 
         int successful = inWindow.Count(check => check.Ok);
-        return Math.Round(100 * (successful / inWindow.Count), 2);
+        return Math.Round(100.0 * successful / inWindow.Count, 2);
     }
 
-    public static string Format(double? value) =>
-        value is null ? "no data" : $"{value}%";
+    public static UptimeSummary Summarize(List<CheckResult> history, DateTime now)
+    {
+        return new UptimeSummary(
+            Percentage(history, now, TimeSpan.FromHours(24)),
+            Percentage(history, now, TimeSpan.FromDays(7)),
+            Percentage(history, now, TimeSpan.FromDays(30)));
+    }
 }

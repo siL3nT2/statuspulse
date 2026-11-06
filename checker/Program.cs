@@ -18,13 +18,8 @@ foreach (var site in sites)
     history = History.AppendAndTrim(history, result, DateTime.UtcNow);
     await HistoryStore.SaveAsync(outputFolder, site.Id, history);
 
-    var now = DateTime.UtcNow;
-    string day = Uptime.Format(Uptime.Percentage(history, now, TimeSpan.FromHours(24)));
-    string week = Uptime.Format(Uptime.Percentage(history, now, TimeSpan.FromDays(7)));
-    string month = Uptime.Format(Uptime.Percentage(history, now, TimeSpan.FromDays(30)));
-
-    checks.Add(new SiteCheck(site, result));
-    Console.WriteLine($"{site.Name} -> {StatusRules.GetStatus(result)} | uptime 24h: {day}, 7d: {week}, 30d: {month}");
+    checks.Add(new SiteCheck(site, result, history));
+    Console.WriteLine($"{site.Name} -> {StatusRules.GetStatus(result)} ({history.Count} checks in history)");
 }
 
 var report = ReportBuilder.Build(DateTime.UtcNow, checks);

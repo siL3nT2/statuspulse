@@ -1,1 +1,1 @@
-public record SiteCheck(Site Site, CheckResult Result);
+public record SiteCheck(Site Site, CheckResult Result, List<CheckResult> History);
