@@ -7,7 +7,7 @@ public static class StatusRules
             return "down";
         }
 
-        if (result.Ms > 3000)
+        if (result.Ms >= 3000)
         {
             return "degraded";
         }
