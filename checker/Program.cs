@@ -7,6 +7,7 @@ string path = Path.Combine(AppContext.BaseDirectory, "sites.json");
 var sites = await SiteConfig.LoadAsync(path);
 
 var checks = new List<SiteCheck>();
+var incidents = new List<Incident>();
 
 foreach (var site in sites)
 {
@@ -19,10 +20,15 @@ foreach (var site in sites)
     await HistoryStore.SaveAsync(outputFolder, site.Id, history);
 
     checks.Add(new SiteCheck(site, result, history));
+    incidents.AddRange(IncidentDetector.Detect(site.Id, history));
+
     Console.WriteLine($"{site.Name} -> {StatusRules.GetStatus(result)} ({history.Count} checks in history)");
 }
 
 var report = ReportBuilder.Build(DateTime.UtcNow, checks);
 await ReportWriter.WriteLatestAsync(report, outputFolder);
 
-Console.WriteLine($"Wrote latest.json to {Path.GetFullPath(outputFolder)}");
+var newestFirst = incidents.OrderByDescending(incident => incident.Start).ToList();
+await ReportWriter.WriteIncidentsAsync(newestFirst, outputFolder);
+
+Console.WriteLine($"Wrote latest.json and incidents.json ({newestFirst.Count} incidents) to {Path.GetFullPath(outputFolder)}");
