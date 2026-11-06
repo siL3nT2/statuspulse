@@ -31,3 +31,15 @@ export function isStale(
   const ageMinutes = (now.getTime() - new Date(generatedAt).getTime()) / 60000
   return ageMinutes > maxAgeMinutes
 }
+
+export function formatDuration(minutes: number | null): string {
+  if (minutes === null) return 'ongoing'
+
+  const rounded = Math.round(minutes)
+  if (rounded < 1) return '< 1 min'
+  if (rounded < 60) return `${rounded} min`
+
+  const hours = Math.floor(rounded / 60)
+  const rest = rounded % 60
+  return rest === 0 ? `${hours} h` : `${hours} h ${rest} min`
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatMs, formatUptime, isStale, timeAgo } from './format'
+import { formatDuration, formatMs, formatUptime, isStale, timeAgo } from './format'
 
 const NOW = new Date('2026-11-06T12:00:00Z')
 
@@ -60,5 +60,31 @@ describe('isStale', () => {
 
   it('is not stale when fresh', () => {
     expect(isStale('2026-11-06T11:50:00Z', 60, NOW)).toBe(false)
+  })
+})
+
+describe('formatDuration', () => {
+  it('says ongoing when there is no end', () => {
+    expect(formatDuration(null)).toBe('ongoing')
+  })
+
+  it('shows under a minute', () => {
+    expect(formatDuration(0.4)).toBe('< 1 min')
+  })
+
+  it('shows minutes', () => {
+    expect(formatDuration(45)).toBe('45 min')
+  })
+
+  it('shows whole hours', () => {
+    expect(formatDuration(120)).toBe('2 h')
+  })
+
+  it('shows hours and minutes', () => {
+    expect(formatDuration(135)).toBe('2 h 15 min')
+  })
+
+  it('rounds to the nearest minute', () => {
+    expect(formatDuration(59.6)).toBe('1 h')
   })
 })

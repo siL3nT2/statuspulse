@@ -1,28 +1,26 @@
 import { useEffect, useState } from 'react'
-import { LATEST_URL } from './config'
-import type { LatestReport } from './types'
 
-type State =
+export type LoadState<T> =
   | { kind: 'loading' }
   | { kind: 'error'; message: string }
-  | { kind: 'ready'; report: LatestReport }
+  | { kind: 'ready'; data: T }
 
-export function useLatest(): State {
-  const [state, setState] = useState<State>({ kind: 'loading' })
+export function useJson<T>(url: string): LoadState<T> {
+  const [state, setState] = useState<LoadState<T>>({ kind: 'loading' })
 
   useEffect(() => {
     const controller = new AbortController()
 
     async function load() {
       try {
-        const response = await fetch(LATEST_URL, { signal: controller.signal })
+        const response = await fetch(url, { signal: controller.signal })
 
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`)
         }
 
-        const report = (await response.json()) as LatestReport
-        setState({ kind: 'ready', report })
+        const data = (await response.json()) as T
+        setState({ kind: 'ready', data })
       } catch (error) {
         if (controller.signal.aborted) return
 
@@ -36,7 +34,7 @@ export function useLatest(): State {
     load()
 
     return () => controller.abort()
-  }, [])
+  }, [url])
 
   return state
 }
