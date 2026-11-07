@@ -2,7 +2,7 @@ name: Check sites
 
 on:
   schedule:
-    - cron: "11,41 * * * *"
+    - cron: "3,18,33,48 * * * *"
   workflow_dispatch:
 
 permissions:
