@@ -1,6 +1,9 @@
+import { historyUrl } from './config'
 import { formatMs, formatUptime, timeAgo } from './format'
+import { ResponseChart } from './ResponseChart'
 import { StatusBadge } from './StatusBadge'
-import type { SiteStatus } from './types'
+import type { CheckResult, SiteStatus } from './types'
+import { useJson } from './useJson'
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
@@ -12,6 +15,8 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 export function SiteCard({ site }: { site: SiteStatus }) {
+  const history = useJson<CheckResult[]>(historyUrl(site.id))
+
   return (
     <li className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
       <div className="flex items-start justify-between gap-4">
@@ -43,6 +48,14 @@ export function SiteCard({ site }: { site: SiteStatus }) {
       {site.check.error && (
         <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
           Last error: {site.check.error}
+        </p>
+      )}
+
+      {history.kind === 'ready' && <ResponseChart checks={history.data} />}
+
+      {history.kind === 'error' && (
+        <p className="mt-4 text-sm text-slate-600 dark:text-slate-300">
+          History unavailable.
         </p>
       )}
     </li>
