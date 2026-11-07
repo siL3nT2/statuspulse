@@ -1,6 +1,8 @@
 ﻿using var client = new HttpClient();
 client.Timeout = TimeSpan.FromSeconds(10);
 
+client.DefaultRequestHeaders.UserAgent.ParseAdd("StatusPulse/1.0 (+https://github.com/siL3nT2/statuspulse)");
+
 string outputFolder = args.Length > 0 ? args[0] : "data";
 
 string path = Path.Combine(AppContext.BaseDirectory, "sites.json");
