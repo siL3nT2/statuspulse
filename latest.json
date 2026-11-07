@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-06T21:59:41.9854182Z",
+  "generatedAt": "2026-11-07T00:14:17.8060926Z",
   "sites": [
     {
       "id": "portfolio",
@@ -7,10 +7,10 @@
       "url": "https://portfjdddomz.netlify.app",
       "state": "up",
       "check": {
-        "time": "2026-11-06T21:59:36.8805455Z",
+        "time": "2026-11-07T00:14:12.6065161Z",
         "ok": true,
         "status": 200,
-        "ms": 781,
+        "ms": 716,
         "error": null
       },
       "uptime": {
@@ -20,16 +20,16 @@
       }
     },
     {
-      "id": "fake",
-      "name": "Fake site (for testing)",
-      "url": "https://this-site-does-not-exist-12345.example",
+      "id": "statuspulse",
+      "name": "StatusPulse dashboard",
+      "url": "https://statuspulse-jdd.netlify.app",
       "state": "down",
       "check": {
-        "time": "2026-11-06T21:59:41.9842113Z",
+        "time": "2026-11-07T00:14:17.8048911Z",
         "ok": false,
-        "status": null,
-        "ms": null,
-        "error": "network"
+        "status": 401,
+        "ms": 35,
+        "error": "http_401"
       },
       "uptime": {
         "last24Hours": 0,
